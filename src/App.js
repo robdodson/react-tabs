@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+// import Tabs from './Tabs';
+import TabList from './TabList';
+import Tab from './Tab';
+// import TabPanels from './TabPanels';
+// import TabPanel from './TabPanel';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TabList>
+        <Tab>First tab</Tab>
+        <Tab>Second tab</Tab>
+        <Tab>Third tab</Tab>
+      </TabList>
+
+      {/* <Tabs>
+        <TabList>
+          <Tab>First tab</Tab>
+          <Tab>Second tab</Tab>
+          <Tab>Third tab</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <p>First panel</p>
+          </TabPanel>
+          <TabPanel>
+            <p>Second panel</p>
+          </TabPanel>
+          <TabPanel>
+            <p>Third panel</p>
+          </TabPanel>
+        </TabPanels>
+      </Tabs> */}
     </div>
   );
 }
