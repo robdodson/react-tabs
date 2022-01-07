@@ -1,4 +1,4 @@
-// import Tabs from './Tabs';
+import Tabs from './Tabs';
 import TabList from './TabList';
 import Tab from './Tab';
 // import TabPanels from './TabPanels';
@@ -7,11 +7,13 @@ import Tab from './Tab';
 function App() {
   return (
     <div className="App">
-      <TabList>
-        <Tab>First tab</Tab>
-        <Tab>Second tab</Tab>
-        <Tab>Third tab</Tab>
-      </TabList>
+      <Tabs>
+        <TabList>
+          <Tab label="First tab" />
+          <Tab label="Second tab" />
+          <Tab label="Third tab" />
+        </TabList>
+      </Tabs>
 
       {/* <Tabs>
         <TabList>

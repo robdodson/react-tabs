@@ -1,52 +1,29 @@
 import React, { Component } from 'react';
 
+const TabName = 'Tab';
+
 export default class TabList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { activeIdx: 0 };
-  }
-
-  handleKeyUp = (e) => {
-    switch (e.key) {
-      case 'ArrowLeft':
-        this.previousTab();
-        break;
-      case 'ArrowRight':
-        this.nextTab();
-        break;
-      default:
-        break;
-    }
-  };
-
-  nextTab = () => {
-    let idx = this.state.activeIdx;
-    idx = (idx + 1) % this.props.children.length;
-    this.setState({ activeIdx: idx });
-  };
-
-  previousTab = () => {
-    let idx = this.state.activeIdx;
-    idx = (idx - 1 + this.props.children.length) % this.props.children.length;
-    this.setState({ activeIdx: idx });
-  };
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyUp);
-  }
-
   render() {
-    const { children } = this.props;
-    const childrenWithProps = React.Children.map(children, (child, i) => {
-      // Checking isValidElement is the safe way and avoids a typescript
-      // error too.
-      if (React.isValidElement(child)) {
-        return React.cloneElement(child, {
-          isSelected: i === this.state.activeIdx,
-        });
+    const { children: childrenProp, tabsRef } = this.props;
+
+    const children = React.Children.map(childrenProp, (child, i) => {
+      if (!React.isValidElement(child)) {
+        return;
       }
-      return child;
+
+      if (child.type.name !== TabName) {
+        return;
+      }
+
+      return React.cloneElement(child, {
+        tabsRef,
+      });
     });
-    return <div className="TabList">{childrenWithProps}</div>;
+
+    return (
+      <div className="TabList" role="tablist">
+        {children}
+      </div>
+    );
   }
 }
