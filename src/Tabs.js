@@ -26,7 +26,7 @@ export default class Tabs extends Component {
 
     const tabs = this.getTabs();
     const tabsLength = tabs.length;
-    let newSelectedIndex = this.state.selectedIndex;
+    let newSelectedIndex = selectedIndex;
     switch (e.key) {
       case 'ArrowLeft':
         newSelectedIndex = Math.max(newSelectedIndex - 1, 0);
