@@ -11,14 +11,18 @@ export default class Tabs extends Component {
     return Array.from(this.ref.current.querySelectorAll('[role = "tab"]'));
   };
 
+  isTab = (target) => {
+    const role = target.getAttribute('role');
+    return role === 'tab';
+  };
+
   // Riffing on the focus managemenet code from Material UI
   // https://github.com/mui-org/material-ui/blob/c224f32bb8f144e590c096d103c9d59c2509ed93/packages/material-ui/src/Tabs/Tabs.js#L415-L454
   handleKeyDown = (e) => {
     const { target } = e;
     const { selectedIndex } = this.state;
 
-    const role = target.getAttribute('role');
-    if (role !== 'tab') {
+    if (!this.isTab(target)) {
       return;
     }
 
@@ -44,7 +48,18 @@ export default class Tabs extends Component {
   };
 
   handleClick = (e) => {
-    console.log('clicked', e.target);
+    const { target } = e;
+    const { selectedIndex } = this.state;
+
+    if (!this.isTab(target)) {
+      return;
+    }
+
+    const tabs = this.getTabs();
+    const newSelectedIndex = tabs.findIndex((el) => el === target);
+    if (newSelectedIndex !== selectedIndex) {
+      this.setState({ selectedIndex: newSelectedIndex });
+    }
   };
 
   render() {
