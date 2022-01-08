@@ -13,7 +13,7 @@ function Tab({ label, selected }) {
     <button
       className="Tab"
       role="tab"
-      data-selected={selected ? '' : null}
+      tabIndex={selected ? 0 : -1}
       ref={buttonRef}
     >
       {label}
