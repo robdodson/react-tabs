@@ -1,76 +1,71 @@
 import React, { Component } from 'react';
 
-const TabListName = 'TabList';
-const TabPanelsName = 'TabPanels';
-
 export default class Tabs extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeIdx: 0 };
-    this.tabsRef = React.createRef();
-    this.panelsRef = React.createRef();
+    this.state = { selectedIndex: 0 };
+    this.ref = React.createRef();
   }
 
-  handleKeyDown = (e) => {
-    switch (e.key) {
-      case 'ArrowLeft':
-        this.previousTab(e);
-        break;
-      case 'ArrowRight':
-        this.nextTab(e);
-        break;
-      default:
-        break;
-    }
+  getTabs = () => {
+    return Array.from(this.ref.current.querySelectorAll('[role = "tab"]'));
   };
 
-  nextTab = (e) => {
-    console.log(this.tabsRef);
+  // Riffing on the focus managemenet code from Material UI
+  // https://github.com/mui-org/material-ui/blob/c224f32bb8f144e590c096d103c9d59c2509ed93/packages/material-ui/src/Tabs/Tabs.js#L415-L454
+  handleKeyDown = (e) => {
     const { target } = e;
-    // Keyboard navigation assumes that [role="tab"] are siblings
-    // though we might warn in the future about nested, interactive elements
-    // as a a11y violation
+    const { selectedIndex } = this.state;
+
     const role = target.getAttribute('role');
     if (role !== 'tab') {
       return;
     }
 
-    console.log('next tab');
-    // let idx = this.state.activeIdx;
-    // idx = (idx + 1) % this.props.children.length;
-    // this.setState({ activeIdx: idx });
+    e.preventDefault();
+
+    const tabs = this.getTabs();
+    const tabsLength = tabs.length;
+    let newSelectedIndex = this.state.selectedIndex;
+    switch (e.key) {
+      case 'ArrowLeft':
+        newSelectedIndex = Math.max(newSelectedIndex - 1, 0);
+        break;
+      case 'ArrowRight':
+        newSelectedIndex = Math.min(newSelectedIndex + 1, tabsLength - 1);
+        break;
+      default:
+        break;
+    }
+
+    if (newSelectedIndex !== selectedIndex) {
+      this.setState({ selectedIndex: newSelectedIndex });
+    }
   };
 
-  previousTab = (e) => {
-    console.log('previous tab');
-    // let idx = this.state.activeIdx;
-    // idx = (idx - 1 + this.props.children.length) % this.props.children.length;
-    // this.setState({ activeIdx: idx });
+  handleClick = (e) => {
+    console.log('clicked', e.target);
   };
 
   render() {
     const { children: childrenProp } = this.props;
+    const { selectedIndex } = this.state;
 
-    this.tabsRef.current = [];
-    this.panelsRef.current = [];
     const children = React.Children.map(childrenProp, (child) => {
       if (!React.isValidElement(child)) {
         return;
       }
 
-      if (child.type.name === TabListName) {
-        return React.cloneElement(child, {
-          tabsRef: this.tabsRef,
-        });
-      } else if (child.type.name === TabPanelsName) {
-        return React.cloneElement(child, {
-          panelsRef: this.panelsRef,
-        });
-      }
+      return React.cloneElement(child, { selectedIndex });
     });
 
     return (
-      <div className="Tabs" onKeyDown={this.handleKeyDown}>
+      <div
+        className="Tabs"
+        onKeyDown={this.handleKeyDown}
+        onClick={this.handleClick}
+        ref={this.ref}
+      >
         {children}
       </div>
     );

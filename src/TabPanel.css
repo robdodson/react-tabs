@@ -1,0 +1,7 @@
+.TabPanel {
+  display: none;
+}
+
+.TabPanel[data-selected] {
+  display: block;
+}

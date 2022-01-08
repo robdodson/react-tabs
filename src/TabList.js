@@ -1,29 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-const TabName = 'Tab';
+function TabList(props) {
+  const { children: childrenProp, selectedIndex } = props;
+  const children = React.Children.map(childrenProp, (child, i) => {
+    if (!React.isValidElement(child)) {
+      return;
+    }
 
-export default class TabList extends Component {
-  render() {
-    const { children: childrenProp, tabsRef } = this.props;
+    return React.cloneElement(child, { selected: i === selectedIndex });
+  });
 
-    const children = React.Children.map(childrenProp, (child, i) => {
-      if (!React.isValidElement(child)) {
-        return;
-      }
-
-      if (child.type.name !== TabName) {
-        return;
-      }
-
-      return React.cloneElement(child, {
-        tabsRef,
-      });
-    });
-
-    return (
-      <div className="TabList" role="tablist">
-        {children}
-      </div>
-    );
-  }
+  return (
+    <div className="TabList" role="tablist">
+      {children}
+    </div>
+  );
 }
+
+export default TabList;
